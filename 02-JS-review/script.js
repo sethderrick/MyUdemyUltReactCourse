@@ -173,4 +173,8 @@ const updatedBook = {
   // Overwriting an existing property
   pages: 1210,
 };
-updatedBook;
+
+const summary = `${title}, a ${pages}-page long book, was written by ${author} and published on ${
+  publicationDate.split("-")[0]
+}.`;
+summary;
