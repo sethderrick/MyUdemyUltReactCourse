@@ -1,0 +1,3 @@
+[submodule "external/ultimate-react-course"]
+	path = external/ultimate-react-course
+	url = git@github.com:jonasschmedtmann/ultimate-react-course.git
