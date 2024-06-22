@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,20 +50,9 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "3c7020d5"
-
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
-
-  useEffect(function() {
-    fetch(`http://www.omdbapi.com/?apikey=${KEY}&s=Godzilla`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data.Search);
-        setMovies(data.Search);
-      });
-  }, []);
 
   return (
     <>
@@ -188,10 +177,6 @@ function Movie({ movie }) {
         <p>
           <span>🗓</span>
           <span>{movie.Year}</span>
-        </p>
-        <p>
-          <span></span>
-          <span>{movie.Rated}</span>
         </p>
       </div>
     </li>
