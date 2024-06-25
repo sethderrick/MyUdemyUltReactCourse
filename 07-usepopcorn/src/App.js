@@ -51,15 +51,19 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
-const KEY = "f84fc31d";
+const KEY = "3c7020d5";
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [selectedId, setSelectedId] = useState(null);
+
+  const [watched, setWatched] = useState(function() {
+    const storedValue = localStorage.getItem("watched")
+    return JSON.parse(storedValue);
+  });
 
   /*
   useEffect(function () {
@@ -97,7 +101,14 @@ export default function App() {
   }
 
   useEffect(
-    function () {
+    function() {
+      localStorage.setItem("watched", JSON.stringify(watched));
+    },
+    [watched]
+  );
+
+  useEffect(
+    function() {
       const controller = new AbortController();
 
       async function fetchMovies() {
@@ -137,7 +148,7 @@ export default function App() {
       handleCloseMovie();
       fetchMovies();
 
-      return function () {
+      return function() {
         controller.abort();
       };
     },
@@ -215,6 +226,12 @@ function Logo() {
 }
 
 function Search({ query, setQuery }) {
+  useEffect(function() {
+    const el = document.querySelector(".search");
+    console.log(el);
+    el.focus();
+  }, []);
+
   return (
     <input
       className="search"
@@ -251,31 +268,6 @@ function Box({ children }) {
     </div>
   );
 }
-
-/*
-function WatchedBox() {
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen2, setIsOpen2] = useState(true);
-
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-
-      {isOpen2 && (
-        <>
-          <WatchedSummary watched={watched} />
-          <WatchedMoviesList watched={watched} />
-        </>
-      )}
-    </div>
-  );
-}
-*/
 
 function MovieList({ movies, onSelectMovie }) {
   return (
@@ -341,7 +333,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   }
 
   useEffect(
-    function () {
+    function() {
       function callback(e) {
         if (e.code === "Escape") {
           onCloseMovie();
@@ -350,7 +342,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
 
       document.addEventListener("keydown", callback);
 
-      return function () {
+      return function() {
         document.removeEventListener("keydown", callback);
       };
     },
@@ -358,7 +350,7 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   );
 
   useEffect(
-    function () {
+    function() {
       async function getMovieDetails() {
         setIsLoading(true);
         const res = await fetch(
@@ -374,11 +366,11 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
   );
 
   useEffect(
-    function () {
+    function() {
       if (!title) return;
       document.title = `Movie | ${title}`;
 
-      return function () {
+      return function() {
         document.title = "usePopcorn";
         // console.log(`Clean up effect for movie ${title}`);
       };
@@ -515,3 +507,30 @@ function WatchedMovie({ movie, onDeleteWatched }) {
     </li>
   );
 }
+
+/*
+function WatchedBox() {
+  const [watched, setWatched] = useState(tempWatchedData);
+  const [isOpen2, setIsOpen2] = useState(true);
+
+  return (
+    <div className="box">
+      <button
+        className="btn-toggle"
+        onClick={() => setIsOpen2((open) => !open)}
+      >
+        {isOpen2 ? "–" : "+"}
+      </button>
+
+      {isOpen2 && (
+        <>
+          <WatchedSummary watched={watched} />
+          <WatchedMoviesList watched={watched} />
+        </>
+      )}
+    </div>
+  );
+}
+*/
+
+
