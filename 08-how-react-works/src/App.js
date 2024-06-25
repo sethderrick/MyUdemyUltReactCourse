@@ -26,6 +26,8 @@ export default function App() {
   );
 }
 
+console.log(<DifferentContent test={23} />);
+
 function Tabbed({ content }) {
   const [activeTab, setActiveTab] = useState(0);
 
@@ -66,6 +68,10 @@ function TabContent({ item }) {
     setLikes(likes + 1);
   }
 
+  function handleTripleInc() {
+    setLikes(likes + 3);
+  }
+
   return (
     <div className="tab-content">
       <h4>{item.summary}</h4>
@@ -79,7 +85,7 @@ function TabContent({ item }) {
         <div className="hearts-counter">
           <span role="img">{likes} ❤️</span>
           <button onClick={handleInc}>+</button>
-          <button>+++</button>
+          <button onClick={handleTripleInc}>+++</button>
         </div>
       </div>
 
